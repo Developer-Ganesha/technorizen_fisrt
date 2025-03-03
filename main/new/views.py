@@ -4,7 +4,6 @@ from rest_framework import status
 from rest_framework.views import APIView
 from new.serializers import UserRegistrationSerializer ,UserLoginSerializer,SandPasswordResetEmailSerializer,SandPasswordResetSerializer,LogOutSerializer
 from django.contrib.auth import authenticate
-from new.renderer import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 import jwt
@@ -18,7 +17,6 @@ def get_tokens_for_user(user):
         'access':str(refresh.access_token),
     }
 class UserRegistrationView(APIView):
-    renderer_classes = [UserRenderer]
     def post(self,request, format=None):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -27,7 +25,6 @@ class UserRegistrationView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class UserLoginView(APIView):
-    renderer_classes = [UserRenderer]
     def post(self,request, format=None):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -57,7 +54,6 @@ class LogOutView(APIView):
         return Response(serializer.errors, status=400)
     
 class SandPasswordResetSandEmailView(APIView):
-    renderer_classes =[UserRenderer]
     def post(self,request,format=None):
         serializer= SandPasswordResetEmailSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -65,7 +61,6 @@ class SandPasswordResetSandEmailView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class SandPasswordResetView(APIView):
-    renderer_classes =[UserRenderer]
     def post(self,request,uid,token,format=None):
         serializer = SandPasswordResetSerializer(data= request.data,context={'uid':uid,'token':token})
         if serializer.is_valid(raise_exception=True):
