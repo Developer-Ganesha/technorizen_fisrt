@@ -4,10 +4,14 @@ import os
 class Utils:
     @staticmethod
     def send_email(data):
-        email = EmailMessage(
-            subject=data['subject'],
-            body=data['body'], 
-            from_email=os.environ.get('EMAIL_FROM'),
-            to=[data['ganeshsavner320@gmail.com']],
-        )
-        email.send() 
+        try:
+            email = EmailMessage(
+                subject=data.get('subject', 'No Subject'), 
+                body=data.get('body', ''),  
+                from_email=os.environ.get('EMAIL_FROM'),
+                to=[data.get('to_email')],
+            )
+            email.send(fail_silently=True)
+            print("Email sent successfully")
+        except Exception as e:
+            print(f"Error sending email: {e}")
